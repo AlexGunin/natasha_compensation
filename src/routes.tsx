@@ -7,7 +7,6 @@ const rootRoute = createRootRoute({
     component: Layout,
 });
 
-
 const catalogRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/',
