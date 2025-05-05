@@ -29,5 +29,5 @@ const finishRoute = createRoute({
 const routeTree = rootRoute.addChildren([catalogRoute, cartRoute, finishRoute]);
 
 export const router = createRouter({ routeTree,
-    basepath: '/natasha_compensation',
-    history: createHashHistory(), });
+    history: createHashHistory()
+});
