@@ -29,6 +29,5 @@ const routeTree = rootRoute.addChildren([catalogRoute, cartRoute, finishRoute]);
 
 export const router = createRouter({
     routeTree,
-    basepath: '/',
     history: createHashHistory()
 });
