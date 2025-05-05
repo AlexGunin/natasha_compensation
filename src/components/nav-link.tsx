@@ -10,7 +10,8 @@ export const NavLink = (props: NavLinkProps) => {
     // @ts-ignore
     const match = useMatch({ to: props.to, fuzzy: false });
     const { state } = useRouter();
-    const isActive = state.location.pathname === props.to
+
+    const isActive = state.location.pathname === `/natasha_compensation${props.to}`
     return <Link
         to={props.to}
     >
