@@ -1,5 +1,5 @@
 // routes.tsx
-import {createRootRoute, createRoute, createRouter} from '@tanstack/react-router';
+import {createHashHistory, createRootRoute, createRoute, createRouter} from '@tanstack/react-router';
 import { lazy } from 'react';
 import {Layout} from "./pages/layout.tsx";
 
@@ -30,4 +30,5 @@ const routeTree = rootRoute.addChildren([catalogRoute, cartRoute, finishRoute]);
 export const router = createRouter({
     routeTree,
     basepath: "/natasha_compensation",
+    history: createHashHistory()
 });
