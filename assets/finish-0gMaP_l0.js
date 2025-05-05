@@ -1,1 +1,0 @@
-import{j as r,S as s,T as e}from"./index-DqTUiz-q.js";function i(){return r.jsxs(s,{ta:"center",children:[r.jsx(e,{order:1,children:"Готово!"}),r.jsx(e,{order:2,children:"Ваши льготы оформлены"})]})}export{i as default};
