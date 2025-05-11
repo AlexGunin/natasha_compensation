@@ -1,11 +1,4 @@
-import {
-  Accordion,
-  AccordionControlProps,
-  AccordionProps,
-  Badge,
-  Flex,
-  Title,
-} from "@mantine/core";
+import { Accordion, AccordionProps, Badge, Flex, Title } from "@mantine/core";
 import { BenefitItem, BenefitScope } from "../../types/benefits";
 import { ChevronDown } from "lucide-react";
 import { CatalogGrid } from "./catalog-grid";

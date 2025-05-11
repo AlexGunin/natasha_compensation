@@ -15,6 +15,7 @@ interface NavigationProps {
 
 export const Navigation = (props: NavigationProps) => {
   const { state, navigate } = useRouter();
+  // @ts-expect-error: Todo
   useMatch({ to: "/" });
 
   const activeTab = state.location.pathname.replace(

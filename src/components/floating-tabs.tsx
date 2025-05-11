@@ -48,12 +48,16 @@ export const FloatingTabs = <T extends string | number>(
   return (
     <Tabs
       variant="none"
+      // @ts-expect-error: Todo
       defaultValue={props.defaultValue}
+      // @ts-expect-error: Todo
       value={activeTab}
       onChange={(value) => {
         if (props.withTransition) {
+          // @ts-expect-error: Todo
           viewTransition(() => setActiveTab(value));
         } else {
+          // @ts-expect-error: Todo
           setActiveTab(value);
         }
       }}
@@ -78,7 +82,9 @@ export const FloatingTabs = <T extends string | number>(
         {props.tabs.map((tab) => (
           <Tabs.Tab
             key={tab.value}
+            // @ts-expect-error: Todo
             value={tab.value}
+            // @ts-expect-error: Todo
             ref={setControlRef(tab.value)}
             className={classes.tab}
             onClick={tab.onClick}

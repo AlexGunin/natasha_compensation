@@ -1,9 +1,4 @@
-import {
-  Children,
-  isValidElement,
-  PropsWithChildren,
-  ReactElement,
-} from "react";
+import { PropsWithChildren, ReactElement } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CSSProperties } from "@mantine/core";
 

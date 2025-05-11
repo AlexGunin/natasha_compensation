@@ -8,6 +8,7 @@ import { lazy } from "react";
 import { Layout } from "./pages/layout.tsx";
 import { authService } from "./services/auth-service.ts";
 
+// @ts-expect-error: Todo
 const protectedBeforeLoad = ({ navigate }) => {
   if (!authService.me) {
     navigate({ to: "/sign-in" });

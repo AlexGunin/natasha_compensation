@@ -7,7 +7,7 @@ interface NavLinkProps extends PropsWithChildren {
 }
 
 export const NavLink = (props: NavLinkProps) => {
-  // @ts-ignore
+  // @ts-expect-error: Todo
   const match = useMatch({ to: props.to, fuzzy: false });
   const { state } = useRouter();
 
