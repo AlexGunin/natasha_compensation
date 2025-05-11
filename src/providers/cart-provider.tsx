@@ -30,7 +30,7 @@ const LIMIT = 50000;
 
 export const CartProvider = (props: PropsWithChildren) => {
   const [cart, setCart] = useLocalStorage({
-    key: "cart",
+    key: "cart-v2",
     defaultValue: DEFAULT_CART,
   });
 
