@@ -1,0 +1,12 @@
+.float-bottom {
+    background: color-mix(in srgb, var(--mantine-color-body), transparent 5%);
+    width: calc(100% + calc(2 * var(--app-horizontal-padding)));
+    position: sticky;
+    bottom: 0;
+    padding: 0.5rem 1rem;
+}
+
+.outlet-container {
+    width: 100%;
+    height: 100%;
+}

@@ -1,50 +1,64 @@
-import {getAddedSum, useCartProvider} from "../cart-context.tsx";
-import {Stack, Title, Text, Button, Grid, Space} from "@mantine/core";
-import {Fragment, useMemo} from "react";
-import {useRouter} from "@tanstack/react-router";
-import {AMOUNT_MONEY} from "../constants.ts";
+import { Stack, Button, Badge } from "@mantine/core";
+import { useRouter } from "@tanstack/react-router";
+import {
+  ActiveAllPanel,
+  ActiveAllPanelProps,
+} from "../components/catalogs/active-all-panel.tsx";
+import { useCatalogContext } from "../providers/catalog-provider.tsx";
+import { useCartContext } from "../providers/cart-provider.tsx";
+import { Price } from "../components/price.tsx";
+import { BenefitScope } from "../types/benefits.ts";
 
-interface RowProps {
-    left: string
-    right: string
-}
+const DEFAULT_OPENED_SCOPE: BenefitScope[] = [];
 
-const Row = (props: RowProps) => {
-    return <Fragment>
-        <Grid.Col span={8}>
-            <Text size="xl">{props.left}</Text>
-        </Grid.Col>
-        <Grid.Col span={4}>
-            <Text size="xl" ta="right">{props.right}</Text>
-        </Grid.Col>
-    </Fragment>
-}
+const BTN_STYLES = {
+  root: {
+    minWidth: "fit-content",
+    maxWidth: 400,
+    margin: "0 auto",
+    background: "var(--app-highlight-gradient)",
+  },
+  label: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+} as const;
 
 export default function CartPage() {
-    const {catalog} = useCartProvider()
-    const router = useRouter()
+  const { dataByScope } = useCatalogContext();
+  const { added, total } = useCartContext();
+  const router = useRouter();
 
-    const activeCart = useMemo(() => {
-        return catalog.filter(item => item.isAdded)
-    }, [catalog])
+  return (
+    <Stack gap="xl">
+      <ActiveAllPanel
+        defaultValue={DEFAULT_OPENED_SCOPE}
+        items={
+          Object.entries(dataByScope).map(([key, value]) => [
+            key,
+            value.filter((item) => added.has(item.id)),
+          ]) as ActiveAllPanelProps["items"]
+        }
+      />
 
-    return <Stack gap="xl">
-        <Title order={1} style={{textAlign:'center'}}>Корзина</Title>
-        <Stack>
-            <Grid>
-                {activeCart.map(item => {
-                    return <Row key={item.id} left={item.title} right={`${item.price}р.`}/>
-                })}
-            </Grid>
-            <Space h="xl" />
-            <Grid>
-                <Row key="total" left="Итого" right={`${getAddedSum(activeCart)}р.`}></Row>
-                <Row key="limit" left="Мой лимит" right={`${AMOUNT_MONEY}р.`}></Row>
-            </Grid>
-        </Stack>
-
-        <Button onClick={() => router.navigate({to: '/finish'})} style={{width: 250, margin: "0 auto"}}>
-            Оформить
-        </Button>
+      <Button
+        onClick={() => router.navigate({ to: "/finish" })}
+        variant="gradient"
+        size="xl"
+        styles={BTN_STYLES}
+        radius="xl"
+      >
+        Оформить
+        <Badge
+          size={"xl"}
+          variant="transparent"
+          color="var(--mantine-font-color)"
+        >
+          <Price value={total} />
+        </Badge>
+      </Button>
     </Stack>
+  );
 }

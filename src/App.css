@@ -1,8 +1,28 @@
 #root {
-  width: 100%;
-  max-width: 1080px;
-  min-height: 100vh;
-  padding: 2rem 1rem 0 1rem;
-  display: flex;
-  justify-content: center;
+    --app-horizontal-padding: 1rem;
+    --app-highlight-gradient: linear-gradient(
+        90deg,
+        var(--mantine-color-blue-filled) 0%,
+        rgba(148, 80, 80, 1) 100%
+    );
+    width: 100%;
+    max-width: 1080px;
+    min-height: 100vh;
+    padding: 1rem var(--app-horizontal-padding) 0;
+    display: flex;
+    justify-content: center; natka synchronise
+}
+
+html[data-mantine-color-scheme="dark"] #root {
+    --app-highlight-gradient: linear-gradient(
+        90deg,
+        var(--mantine-color-blue-filled) 0%,
+        rgba(148, 80, 80, 1) 100%
+    );
+}
+
+::view-transition-old,
+::view-transition-new {
+  transition-duration: 600ms; /* 👈 Настраиваем время */
+  transition-timing-function: ease-in-out;
 }
