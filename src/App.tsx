@@ -8,6 +8,7 @@ import { CartProvider } from "./providers/cart-provider.tsx";
 import { UserProvider } from "./providers/user-provider.tsx";
 import { PropsWithChildren } from "react";
 import { ThemeProvider } from "./providers/theme-provider.tsx";
+import { DrawerProvider } from "./providers/drawer-provider.tsx";
 
 const queryClient = new QueryClient();
 
@@ -21,12 +22,18 @@ const DataProviders = (props: PropsWithChildren) => {
   );
 };
 
+const UiProviders = (props: PropsWithChildren) => {
+  return <DrawerProvider>{props.children}</DrawerProvider>;
+};
+
 export const App = () => {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
         <DataProviders>
-          <RouterProvider router={router} />
+          <UiProviders>
+            <RouterProvider router={router} />
+          </UiProviders>
         </DataProviders>
       </QueryClientProvider>
     </ThemeProvider>

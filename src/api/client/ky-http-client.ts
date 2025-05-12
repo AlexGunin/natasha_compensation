@@ -52,6 +52,10 @@ export class KyHttpClient implements HttpClient {
     return await this.client.put(url, { json: body }).json<T>();
   }
 
+  async patch<T>(url: string, body?: unknown): Promise<T> {
+    return await this.client.patch(url, { json: body }).json<T>();
+  }
+
   async delete<T>(url: string): Promise<T> {
     return await this.client.delete(url).json<T>();
   }

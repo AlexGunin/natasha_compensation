@@ -1,11 +1,13 @@
-import { ActionIcon, Avatar, Flex, Popover } from "@mantine/core";
+import { Avatar, Flex, Menu, useMantineColorScheme } from "@mantine/core";
 import { Navigation } from "./navigation";
-import { LogOut } from "lucide-react";
+import { LogOut, Moon, Sun, CirclePlus } from "lucide-react";
 import { NavigationItem } from "../types/navigation";
 import { useUserContext } from "../providers/user-provider";
 import { authService } from "../services/auth-service";
-import { User } from "../types/users";
+import { User, UserRole } from "../types/users";
 import { ThemeBtn } from "./theme-btn";
+import { BenefitForm } from "./catalogs/benefit-form";
+import { useDrawerContext } from "../providers/drawer-provider";
 
 const NAVIGATION_ITEMS = [
   {
@@ -39,10 +41,35 @@ interface UserAvatarProps {
   user: User;
 }
 
-const UserAvatar = (props: UserAvatarProps) => {
+const AdminMenu = () => {
+  const { open, close } = useDrawerContext();
+
   return (
-    <Popover position="top" withArrow shadow="md">
-      <Popover.Target>
+    <>
+      <Menu.Label>Для админа</Menu.Label>
+      <Menu.Item
+        leftSection={<CirclePlus size={16} />}
+        onClick={() => {
+          open({
+            children: <BenefitForm onSubmit={close} />,
+            title: `Создание льготы`,
+          });
+        }}
+      >
+        Создать льготу
+      </Menu.Item>
+      <Menu.Divider />
+    </>
+  );
+};
+
+const UserAvatar = (props: UserAvatarProps) => {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const user = useUserContext();
+
+  return (
+    <Menu shadow="md" width={200}>
+      <Menu.Target>
         {props.user.nickname === "anonym" ? (
           <Avatar radius="xl" />
         ) : (
@@ -50,22 +77,21 @@ const UserAvatar = (props: UserAvatarProps) => {
             {props.user.nickname.slice(0, 2).toUpperCase()}
           </Avatar>
         )}
-      </Popover.Target>
-      <Popover.Dropdown>
-        <Flex gap="md" justify="center">
-          <ThemeBtn />
-          <ActionIcon
-            onClick={authService.logout}
-            variant="light"
-            color="gray"
-            size="xl"
-            radius="xl"
-          >
-            <LogOut size={24} />
-          </ActionIcon>
-        </Flex>
-      </Popover.Dropdown>
-    </Popover>
+      </Menu.Target>
+
+      <Menu.Dropdown>
+        {user?.role === UserRole.ADMIN && <AdminMenu />}
+        <Menu.Item
+          leftSection={
+            colorScheme === "dark" ? <Moon size={16} /> : <Sun size={16} />
+          }
+          onClick={toggleColorScheme}
+        >
+          Управление темой
+        </Menu.Item>
+        <Menu.Item leftSection={<LogOut size={16} />}>Выйти</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   );
 };
 
@@ -83,7 +109,7 @@ export const DockBar = () => {
           return user ? true : !item.shouldUser;
         })}
       />
-      {user ? <UserAvatar user={user} /> : <ThemeBtn></ThemeBtn>}
+      {user ? <UserAvatar user={user} /> : <ThemeBtn />}
     </Flex>
   );
 };

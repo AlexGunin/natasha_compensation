@@ -15,6 +15,8 @@ import { PriceBadge } from "../price-badge";
 import { useCartContext } from "../../providers/cart-provider";
 import { Swap } from "../swap";
 import { getTransparentBg } from "../../utils/get-transparent-bg";
+import { CatalogItemActions } from "./catalog-item-actions";
+import { useCatalogContext } from "../../providers/catalog-provider";
 
 const Tooltip = (props: TooltipProps) => {
   if (!props.label) {
@@ -32,7 +34,7 @@ const EVENTS_FOR_TOOLTIP = { hover: true, focus: true, touch: true } as const;
 
 export const CatalogItem = (props: BenefitItem) => {
   const { added, add, remove, getQuantity, checkCanAdd } = useCartContext();
-
+  const { markedToDelete } = useCatalogContext();
   const isAdded = added.has(props.id);
   const quantity = getQuantity(props.id);
   const canAdd = checkCanAdd(props);
@@ -50,13 +52,17 @@ export const CatalogItem = (props: BenefitItem) => {
         boxShadow: isAdded
           ? `0px 0px 8px 2px ${getTransparentBg("var(--mantine-color-blue-filled)", 30)}`
           : undefined,
+        opacity: markedToDelete.has(props.id) ? 0.2 : 1,
       }}
     >
       <Group justify="space-between">
         <Title order={3} fw={500}>
           {props.name}
         </Title>
-        <PriceBadge value={props.price} />
+        <Flex gap="xs" align="center">
+          <PriceBadge value={props.price} />
+          <CatalogItemActions item={props} />
+        </Flex>
       </Group>
 
       {props.description ? (
