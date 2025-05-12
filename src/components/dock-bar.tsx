@@ -1,16 +1,11 @@
-import {
-  ActionIcon,
-  Avatar,
-  Flex,
-  Popover,
-  useMantineColorScheme,
-} from "@mantine/core";
+import { ActionIcon, Avatar, Flex, Popover } from "@mantine/core";
 import { Navigation } from "./navigation";
-import { Moon, Sun, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { NavigationItem } from "../types/navigation";
 import { useUserContext } from "../providers/user-provider";
 import { authService } from "../services/auth-service";
 import { User } from "../types/users";
+import { ThemeBtn } from "./theme-btn";
 
 const NAVIGATION_ITEMS = [
   {
@@ -45,8 +40,6 @@ interface UserAvatarProps {
 }
 
 const UserAvatar = (props: UserAvatarProps) => {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-
   return (
     <Popover position="top" withArrow shadow="md">
       <Popover.Target>
@@ -60,15 +53,7 @@ const UserAvatar = (props: UserAvatarProps) => {
       </Popover.Target>
       <Popover.Dropdown>
         <Flex gap="md" justify="center">
-          <ActionIcon
-            onClick={toggleColorScheme}
-            variant="light"
-            color="gray"
-            size="xl"
-            radius="xl"
-          >
-            {colorScheme === "dark" ? <Moon size={24} /> : <Sun size={24} />}
-          </ActionIcon>
+          <ThemeBtn />
           <ActionIcon
             onClick={authService.logout}
             variant="light"
@@ -98,7 +83,7 @@ export const DockBar = () => {
           return user ? true : !item.shouldUser;
         })}
       />
-      {user ? <UserAvatar user={user} /> : null}
+      {user ? <UserAvatar user={user} /> : <ThemeBtn></ThemeBtn>}
     </Flex>
   );
 };

@@ -1,17 +1,13 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react";
 import { useLocalStorage } from "@mantine/hooks";
-import { BenefitId, BenefitItem } from "../types/benefits.ts";
+import { BenefitId, BenefitInOrder, BenefitItem } from "../types/benefits.ts";
 
-type Cart = Record<BenefitId, CartBenefitItem>;
-
-interface CartBenefitItem extends BenefitItem {
-  quantity: number;
-}
+type Cart = Record<BenefitId, BenefitInOrder>;
 
 interface ICartContext {
   cart: Cart;
   added: Set<BenefitId>;
-  list: CartBenefitItem[];
+  list: BenefitInOrder[];
   add: (item: BenefitItem) => void;
   remove: (item: BenefitItem) => void;
   getQuantity: (id: BenefitId) => number;
@@ -36,6 +32,7 @@ export const CartProvider = (props: PropsWithChildren) => {
 
   const { added, list, total } = useMemo(() => {
     const list = Object.values(cart);
+
     return {
       added: new Set(Object.keys(cart).map(Number)),
       list,
@@ -72,10 +69,15 @@ export const CartProvider = (props: PropsWithChildren) => {
       const newObj = structuredClone(prev);
       const currentBenefit = prev[item.id];
 
-      newObj[item.id] = {
-        ...item,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { max_usage, ...toCopy } = item;
+
+      const obj = {
+        ...toCopy,
         quantity: currentBenefit ? currentBenefit.quantity + 1 : 1,
       };
+
+      newObj[item.id] = obj;
 
       return newObj;
     });

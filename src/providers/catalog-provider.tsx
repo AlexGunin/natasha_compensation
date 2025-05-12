@@ -23,6 +23,8 @@ export const CatalogProvider = (props: PropsWithChildren) => {
     queryKey: ["benefits"],
     queryFn: api.benefits.get,
     gcTime: 1000 * 60 * 10,
+    retry: 3,
+    retryDelay: 3000,
   });
 
   const dataByScope = useMemo(() => {

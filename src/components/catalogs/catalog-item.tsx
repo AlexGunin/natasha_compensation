@@ -28,6 +28,8 @@ const SWAP_ITEM_STYLE = {
   marginTop: "auto",
 } as const;
 
+const EVENTS_FOR_TOOLTIP = { hover: true, focus: true, touch: true } as const;
+
 export const CatalogItem = (props: BenefitItem) => {
   const { added, add, remove, getQuantity, checkCanAdd } = useCartContext();
 
@@ -63,52 +65,6 @@ export const CatalogItem = (props: BenefitItem) => {
         </Text>
       ) : null}
 
-      {/* <Swap value={isAdded ? "added" : "not-added"}>
-        <Swap.Item value="added" style={SWAP_ITEM_STYLE}>
-          <Flex gap="md" align="center" justify="center">
-            <ActionIcon
-              onClick={() => remove(props)}
-              size="xl"
-              flex={1}
-              radius="md"
-              variant="light"
-              color={quantity === 1 ? "red" : undefined}
-            >
-              <Minus />
-            </ActionIcon>
-            <Text size="xl" miw={50} ta="center">
-              {quantity}
-            </Text>
-            <Tooltip label={canAdd.value ? null : canAdd.reason}>
-              <ActionIcon
-                disabled={!canAdd.value}
-                onClick={() => add(props)}
-                size="xl"
-                variant="light"
-                flex={1}
-                radius="md"
-              >
-                <Plus />
-              </ActionIcon>
-            </Tooltip>
-          </Flex>
-        </Swap.Item>
-        <Swap.Item value="not-added" style={SWAP_ITEM_STYLE}>
-          <Tooltip label={canAdd.value ? null : canAdd.reason}>
-            <Button
-              color="blue"
-              size="md"
-              fullWidth
-              radius="md"
-              variant="light"
-              disabled={!canAdd.value}
-              onClick={() => add(props)}
-            >
-              Добавить
-            </Button>
-          </Tooltip>
-        </Swap.Item>
-      </Swap> */}
       <Swap
         isActiveFirst={isAdded}
         first={
@@ -126,7 +82,10 @@ export const CatalogItem = (props: BenefitItem) => {
             <Text size="xl" miw={50} ta="center">
               {quantity}
             </Text>
-            <Tooltip label={canAdd.value ? null : canAdd.reason}>
+            <Tooltip
+              label={canAdd.value ? null : canAdd.reason}
+              events={EVENTS_FOR_TOOLTIP}
+            >
               <ActionIcon
                 disabled={!canAdd.value}
                 onClick={() => add(props)}
@@ -141,7 +100,10 @@ export const CatalogItem = (props: BenefitItem) => {
           </Flex>
         }
         second={
-          <Tooltip label={canAdd.value ? null : canAdd.reason}>
+          <Tooltip
+            label={canAdd.value ? null : canAdd.reason}
+            events={EVENTS_FOR_TOOLTIP}
+          >
             <Button
               color="blue"
               size="md"

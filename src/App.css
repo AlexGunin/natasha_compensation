@@ -5,6 +5,7 @@
         var(--mantine-color-blue-filled) 0%,
         rgba(148, 80, 80, 1) 100%
     );
+
     width: 100%;
     max-width: 1080px;
     min-height: 100vh;

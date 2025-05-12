@@ -8,6 +8,9 @@ import { useCatalogContext } from "../providers/catalog-provider.tsx";
 import { useCartContext } from "../providers/cart-provider.tsx";
 import { Price } from "../components/price.tsx";
 import { BenefitScope } from "../types/benefits.ts";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "../api/api.ts";
+import { toast } from "react-toastify";
 
 const DEFAULT_OPENED_SCOPE: BenefitScope[] = [];
 
@@ -28,8 +31,17 @@ const BTN_STYLES = {
 
 export default function CartPage() {
   const { dataByScope } = useCatalogContext();
-  const { added, total } = useCartContext();
+  const { added, total, list } = useCartContext();
   const router = useRouter();
+  const mutation = useMutation({
+    mutationFn: api.orders.create,
+    onSuccess: () => {
+      router.navigate({ to: "/finish" });
+    },
+    onError: (err) => {
+      toast(`Ошибка при создании заказа: ${err.message}`, { type: "error" });
+    },
+  });
 
   return (
     <Stack gap="xl">
@@ -44,11 +56,12 @@ export default function CartPage() {
       />
 
       <Button
-        onClick={() => router.navigate({ to: "/finish" })}
+        onClick={() => mutation.mutate(list)}
         variant="gradient"
         size="xl"
         styles={BTN_STYLES}
         radius="xl"
+        loading={mutation.isPending}
       >
         Оформить
         <Badge

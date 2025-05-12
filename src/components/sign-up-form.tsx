@@ -10,6 +10,7 @@ import {
 import { useForm } from "@mantine/form";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
@@ -33,9 +34,8 @@ export const SignUpForm = () => {
     setLoading(true);
     try {
       console.log("Регистрация:", values);
-      // Здесь можно вызвать API для регистрации
     } catch (error) {
-      console.error("Ошибка при регистрации", error);
+      toast(`Ошибка при регистрации: ${error}`, { type: "error" });
     } finally {
       setLoading(false);
     }

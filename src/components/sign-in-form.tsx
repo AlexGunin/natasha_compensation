@@ -12,6 +12,7 @@ import { useForm } from "@mantine/form";
 import { MouseEvent, useRef, useState } from "react";
 import { authService } from "../services/auth-service";
 import { Link, useRouter } from "@tanstack/react-router";
+import { toast } from "react-toastify";
 
 export const SignInForm = () => {
   const [loading, setLoading] = useState(false);
@@ -38,12 +39,11 @@ export const SignInForm = () => {
       if (isAnonymous.current) {
         await authService.signInAnonym();
       } else {
-        const signIn = await authService.signIn(values);
-        console.log("SIGN IN", signIn);
+        await authService.signIn(values);
       }
       navigate({ to: "/" });
-    } catch (error) {
-      console.error("Ошибка при входе", error);
+    } catch (error: unknown) {
+      toast(`Ошибка при входе: ${error}`, { type: "error" });
     } finally {
       setLoading(false);
       isAnonymous.current = false;

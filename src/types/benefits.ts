@@ -15,3 +15,7 @@ export interface BenefitItem {
   max_usage: number | null;
   scope: BenefitScope;
 }
+
+export interface BenefitInOrder extends Omit<BenefitItem, "max_usage"> {
+  quantity: number;
+}
