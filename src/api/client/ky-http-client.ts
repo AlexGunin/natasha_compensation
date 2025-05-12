@@ -1,5 +1,6 @@
 import ky from "ky";
 import { HttpClient } from "./types";
+import { ACCESS_TOKEN_STORAGE_KEY } from "../../constants/auth";
 
 const buildQueryString = (params: Record<string, string | number> = {}) => {
   const query = new URLSearchParams();
@@ -24,6 +25,11 @@ export class KyHttpClient implements HttpClient {
         beforeRequest: [
           (request) => {
             console.log(`Request to: ${request.url}`);
+
+            const token = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+            if (token) {
+              request.headers.set("Authorization", `Bearer ${token}`);
+            }
           },
         ],
       },

@@ -1,3 +1,4 @@
+import { AuthResponse } from "../types/auth";
 import { SignInUser, SignUpUser, User } from "../types/users";
 import { HttpClient } from "./client/types";
 
@@ -35,7 +36,7 @@ export class AuthApi {
 
   signUp = reusePromise(async (user: SignUpUser) => {
     try {
-      return this.client.post<User | null>("auth/register", user);
+      return this.client.post<AuthResponse | null>("auth/register", user);
     } catch (err) {
       console.error(err);
       return null;
@@ -44,7 +45,7 @@ export class AuthApi {
 
   signIn = reusePromise(async (user: SignInUser) => {
     try {
-      return this.client.post<User | null>("auth/login", user);
+      return this.client.post<AuthResponse | null>("auth/login", user);
     } catch (err) {
       console.error(err);
       return null;
@@ -53,7 +54,7 @@ export class AuthApi {
 
   signInAnonym = reusePromise(async () => {
     try {
-      return this.client.post<User | null>("auth/anonym");
+      return this.client.post<AuthResponse | null>("auth/anonym");
     } catch (err) {
       console.error(err);
       return null;

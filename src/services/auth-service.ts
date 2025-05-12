@@ -1,4 +1,6 @@
 import { api } from "../api/api";
+import { ACCESS_TOKEN_STORAGE_KEY } from "../constants/auth";
+import { AuthResponse } from "../types/auth";
 import { SignInUser, SignUpUser, User } from "../types/users";
 
 type UserUpdateCb = (user: User | null) => void;
@@ -9,37 +11,26 @@ export class AuthService {
   private subsribers = new Set<UserUpdateCb>();
 
   signUp = async (data: SignUpUser) => {
-    const user = await api.auth.signUp(data);
+    const authResponse = await api.auth.signUp(data);
 
-    if (user) {
-      this.setMe(user);
-    }
-
-    return user;
+    return this.handleAuthResponse(authResponse);
   };
 
   signIn = async (data: SignInUser) => {
-    const user = await api.auth.signIn(data);
+    const authResponse = await api.auth.signIn(data);
 
-    if (user) {
-      this.setMe(user);
-    }
-
-    return user;
+    return this.handleAuthResponse(authResponse);
   };
 
   signInAnonym = async () => {
-    const user = await api.auth.signInAnonym();
+    const authResponse = await api.auth.signInAnonym();
 
-    if (user) {
-      this.setMe(user);
-    }
-
-    return user;
+    return this.handleAuthResponse(authResponse);
   };
 
   logout = async () => {
-    await api.auth.logout();
+    // await api.auth.logout();
+    localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
     this.setMe(null);
   };
 
@@ -63,6 +54,19 @@ export class AuthService {
       this.subsribers.delete(cb);
     };
   };
+
+  private handleAuthResponse(response: AuthResponse | null) {
+    if (!response) {
+      return null;
+    }
+    const { access_token, user } = response;
+
+    localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, access_token);
+
+    this.setMe(user);
+
+    return user;
+  }
 
   private notify() {
     this.subsribers.forEach((cb) => {
