@@ -38,6 +38,7 @@ export const CatalogItem = (props: BenefitItem) => {
   const { added, add, remove, getQuantity, checkCanAdd } = useCartContext();
   const { markedToDelete } = useCatalogContext();
   const user = useUserContext();
+
   const isAdded = added.has(props.id);
   const quantity = getQuantity(props.id);
   const canAdd = checkCanAdd(props);

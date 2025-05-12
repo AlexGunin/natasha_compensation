@@ -14,7 +14,7 @@ export const ToastUndo = (props: ToastContentProps<UndoNotificationData>) => {
   };
 
   return (
-    <Flex align="center" gap="md">
+    <Flex align="center" gap="md" justify="space-between" flex={1}>
       <Text>{props.data.title ?? "Элемент будет удален"}</Text>
       <ActionIcon size="xl" variant="light" color="gray" onClick={handleUndo}>
         <Undo2 size={24} />
