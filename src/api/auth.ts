@@ -38,6 +38,7 @@ export class AuthApi {
       return this.client.post<User | null>("auth/register", user);
     } catch (err) {
       console.error(err);
+      return null;
     }
   });
 
@@ -46,6 +47,7 @@ export class AuthApi {
       return this.client.post<User | null>("auth/login", user);
     } catch (err) {
       console.error(err);
+      return null;
     }
   });
 
@@ -54,6 +56,7 @@ export class AuthApi {
       return this.client.post<User | null>("auth/anonym");
     } catch (err) {
       console.error(err);
+      return null;
     }
   });
 
@@ -62,6 +65,7 @@ export class AuthApi {
       return await this.client.get<User | null>("auth/me");
     } catch (err) {
       console.error(err);
+      return null;
     }
   });
 
