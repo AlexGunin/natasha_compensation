@@ -17,6 +17,8 @@ import { Swap } from "../swap";
 import { getTransparentBg } from "../../utils/get-transparent-bg";
 import { CatalogItemActions } from "./catalog-item-actions";
 import { useCatalogContext } from "../../providers/catalog-provider";
+import { useUserContext } from "../../providers/user-provider";
+import { UserRole } from "../../types/users";
 
 const Tooltip = (props: TooltipProps) => {
   if (!props.label) {
@@ -35,6 +37,7 @@ const EVENTS_FOR_TOOLTIP = { hover: true, focus: true, touch: true } as const;
 export const CatalogItem = (props: BenefitItem) => {
   const { added, add, remove, getQuantity, checkCanAdd } = useCartContext();
   const { markedToDelete } = useCatalogContext();
+  const user = useUserContext();
   const isAdded = added.has(props.id);
   const quantity = getQuantity(props.id);
   const canAdd = checkCanAdd(props);
@@ -61,7 +64,7 @@ export const CatalogItem = (props: BenefitItem) => {
         </Title>
         <Flex gap="xs" align="center">
           <PriceBadge value={props.price} />
-          <CatalogItemActions item={props} />
+          {user?.role === UserRole.ADMIN && <CatalogItemActions item={props} />}
         </Flex>
       </Group>
 

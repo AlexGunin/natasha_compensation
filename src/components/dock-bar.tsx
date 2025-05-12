@@ -89,7 +89,12 @@ const UserAvatar = (props: UserAvatarProps) => {
         >
           Управление темой
         </Menu.Item>
-        <Menu.Item leftSection={<LogOut size={16} />}>Выйти</Menu.Item>
+        <Menu.Item
+          leftSection={<LogOut size={16} />}
+          onClick={authService.logout}
+        >
+          Выйти
+        </Menu.Item>
       </Menu.Dropdown>
     </Menu>
   );
