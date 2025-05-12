@@ -5,6 +5,10 @@ export class OrdersApi {
   constructor(private client: HttpClient) {}
 
   create = async (order: BenefitsOrder) => {
-    return this.client.post<number>("orders", order);
+    try {
+      return this.client.post<number>("orders", order);
+    } catch (err) {
+      console.error(err);
+    }
   };
 }

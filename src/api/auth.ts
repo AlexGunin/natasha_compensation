@@ -5,7 +5,6 @@ const reusePromise = <
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Args extends any[],
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // Return extends any,
   Callback extends (...args: Args) => Promise<any>,
 >(
   callback: Callback,
@@ -19,36 +18,15 @@ const reusePromise = <
 
     const internalPromise = callback(...args);
 
+    // @ts-expect-error: Todo
     promise = internalPromise;
 
     internalPromise.finally(() => {
       promise = null;
     });
 
+    // @ts-expect-error: Todo
     return internalPromise;
-  };
-};
-
-const deduplication = (): MethodDecorator => {
-  return (target, propertyKey, descriptor) => {
-    const originalMethod = descriptor.value;
-
-    let promise: Promise<any> | null = null;
-
-    descriptor.value = async function (...args: any[]) {
-      if (promise) return promise;
-
-      promise = originalMethod.apply(this, args);
-
-      try {
-        const result = await promise;
-        promise = null;
-        return result;
-      } catch (error) {
-        promise = null;
-        throw error;
-      }
-    };
   };
 };
 
@@ -56,26 +34,42 @@ export class AuthApi {
   constructor(private client: HttpClient) {}
 
   signUp = reusePromise(async (user: SignUpUser) => {
-    return this.client.post<User | null>("auth/register", user);
+    try {
+      return this.client.post<User | null>("auth/register", user);
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   signIn = reusePromise(async (user: SignInUser) => {
-    return this.client.post<User | null>("auth/login", user);
+    try {
+      return this.client.post<User | null>("auth/login", user);
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   signInAnonym = reusePromise(async () => {
-    return this.client.post<User | null>("auth/anonym");
+    try {
+      return this.client.post<User | null>("auth/anonym");
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   me = reusePromise(async () => {
     try {
       return await this.client.get<User | null>("auth/me");
     } catch (err) {
-      return null;
+      console.error(err);
     }
   });
 
   logout = reusePromise(async () => {
-    return this.client.post<null>("auth/logout");
+    try {
+      return this.client.post<null>("auth/logout");
+    } catch (err) {
+      console.error(err);
+    }
   });
 }
