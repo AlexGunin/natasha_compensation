@@ -1,3 +1,5 @@
+@layer mantine, mantine-contextmenu;
+
 #root {
     --app-horizontal-padding: 1rem;
     --app-highlight-gradient: linear-gradient(
@@ -6,12 +8,13 @@
         rgba(148, 80, 80, 1) 100%
     );
 
+    position: relative;
     width: 100%;
     max-width: 1080px;
     min-height: 100vh;
     padding: 1rem var(--app-horizontal-padding) 0;
     display: flex;
-    justify-content: center; natka synchronise
+    justify-content: center;
 }
 
 html[data-mantine-color-scheme="dark"] #root {

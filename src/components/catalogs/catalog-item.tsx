@@ -5,39 +5,27 @@ import {
   Flex,
   Group,
   Text,
-  Tooltip as MantineTooltip,
-  TooltipProps,
   Title,
 } from "@mantine/core";
 import { Plus, Minus } from "lucide-react";
 import { BenefitItem } from "../../types/benefits";
-import { PriceBadge } from "../price-badge";
+import { PriceBadge } from "../shared/price-badge";
 import { useCartContext } from "../../providers/cart-provider";
-import { Swap } from "../swap";
+import { Swap } from "../shared/swap";
 import { getTransparentBg } from "../../utils/get-transparent-bg";
-import { CatalogItemActions } from "./catalog-item-actions";
 import { useCatalogContext } from "../../providers/catalog-provider";
-import { useUserContext } from "../../providers/user-provider";
-import { UserRole } from "../../types/users";
-
-const Tooltip = (props: TooltipProps) => {
-  if (!props.label) {
-    return props.children;
-  }
-
-  return <MantineTooltip color="gray" offset={4} {...props} />;
-};
+import { useCardContextMenu } from "./hooks/use-card-context-menu";
+import { Tooltip } from "../shared/tooltip";
 
 const SWAP_ITEM_STYLE = {
   marginTop: "auto",
 } as const;
 
-const EVENTS_FOR_TOOLTIP = { hover: true, focus: true, touch: true } as const;
-
 export const CatalogItem = (props: BenefitItem) => {
   const { added, add, remove, getQuantity, checkCanAdd } = useCartContext();
   const { markedToDelete } = useCatalogContext();
-  const user = useUserContext();
+
+  const onContextMenu = useCardContextMenu(props);
 
   const isAdded = added.has(props.id);
   const quantity = getQuantity(props.id);
@@ -54,19 +42,20 @@ export const CatalogItem = (props: BenefitItem) => {
         flexDirection: "column",
         gap: 24,
         boxShadow: isAdded
-          ? `0px 0px 8px 2px ${getTransparentBg("var(--mantine-color-blue-filled)", 30)}`
+          ? `0px 0px 8px 2px ${getTransparentBg(
+              "var(--mantine-color-blue-filled)",
+              30
+            )}`
           : undefined,
         opacity: markedToDelete.has(props.id) ? 0.2 : 1,
       }}
+      onContextMenu={onContextMenu}
     >
       <Group justify="space-between">
         <Title order={3} fw={500}>
           {props.name}
         </Title>
-        <Flex gap="xs" align="center">
-          <PriceBadge value={props.price} />
-          {user?.role === UserRole.ADMIN && <CatalogItemActions item={props} />}
-        </Flex>
+        <PriceBadge value={props.price} />
       </Group>
 
       {props.description ? (
@@ -92,10 +81,7 @@ export const CatalogItem = (props: BenefitItem) => {
             <Text size="xl" miw={50} ta="center">
               {quantity}
             </Text>
-            <Tooltip
-              label={canAdd.value ? null : canAdd.reason}
-              events={EVENTS_FOR_TOOLTIP}
-            >
+            <Tooltip label={canAdd.value ? null : canAdd.reason}>
               <ActionIcon
                 disabled={!canAdd.value}
                 onClick={() => add(props)}
@@ -103,6 +89,7 @@ export const CatalogItem = (props: BenefitItem) => {
                 variant="light"
                 flex={1}
                 radius="md"
+                data-onboarding="benefit-add"
               >
                 <Plus />
               </ActionIcon>
@@ -110,10 +97,7 @@ export const CatalogItem = (props: BenefitItem) => {
           </Flex>
         }
         second={
-          <Tooltip
-            label={canAdd.value ? null : canAdd.reason}
-            events={EVENTS_FOR_TOOLTIP}
-          >
+          <Tooltip label={canAdd.value ? null : canAdd.reason}>
             <Button
               color="blue"
               size="md"
@@ -122,6 +106,7 @@ export const CatalogItem = (props: BenefitItem) => {
               variant="light"
               disabled={!canAdd.value}
               onClick={() => add(props)}
+              data-onboarding="benefit-add"
             >
               Добавить
             </Button>

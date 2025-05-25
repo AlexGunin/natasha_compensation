@@ -1,6 +1,7 @@
 import { AuthApi } from "./auth";
 import { BenefitsApi } from "./benefits";
 import { KyHttpClient } from "./client/ky-http-client";
+import { LimitsApi } from "./limits";
 import { OrdersApi } from "./orders";
 import { UsersApi } from "./users";
 
@@ -13,4 +14,5 @@ export const api = {
   users: new UsersApi(httpClient),
   auth: new AuthApi(httpClient),
   orders: new OrdersApi(httpClient),
+  limit: new LimitsApi(httpClient),
 };

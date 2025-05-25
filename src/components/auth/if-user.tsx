@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { useUserContext } from "../providers/user-provider";
+import { useUserContext } from "../../providers/user-provider";
 
 export const IfUser = (props: PropsWithChildren) => {
   const user = useUserContext();

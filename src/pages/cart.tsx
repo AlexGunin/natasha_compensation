@@ -6,13 +6,15 @@ import {
 } from "../components/catalogs/active-all-panel.tsx";
 import { useCatalogContext } from "../providers/catalog-provider.tsx";
 import { useCartContext } from "../providers/cart-provider.tsx";
-import { Price } from "../components/price.tsx";
+import { Price } from "../components/shared/price.tsx";
 import { BenefitScope } from "../types/benefits.ts";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../api/api.ts";
 import { toast } from "react-toastify";
+import { useOnboarding } from "../providers/onboarding-provider.tsx";
 
 const DEFAULT_OPENED_SCOPE: BenefitScope[] = [];
+const DEFAULT_ONBOARDING_OPENED_SCOPE: BenefitScope[] = [BenefitScope.SELF,BenefitScope.FAMILY];
 
 const BTN_STYLES = {
   root: {
@@ -30,6 +32,7 @@ const BTN_STYLES = {
 } as const;
 
 export default function CartPage() {
+  const {isActive} = useOnboarding()
   const { dataByScope } = useCatalogContext();
   const { added, total, list } = useCartContext();
   const router = useRouter();
@@ -45,23 +48,31 @@ export default function CartPage() {
 
   return (
     <Stack gap="xl">
-      <ActiveAllPanel
-        defaultValue={DEFAULT_OPENED_SCOPE}
-        items={
-          Object.entries(dataByScope).map(([key, value]) => [
-            key,
-            value.filter((item) => added.has(item.id)),
-          ]) as ActiveAllPanelProps["items"]
-        }
-      />
+      <div data-onboarding="cart-items">
+        <ActiveAllPanel
+          defaultValue={isActive ? DEFAULT_ONBOARDING_OPENED_SCOPE : DEFAULT_OPENED_SCOPE}
+          items={
+            Object.entries(dataByScope).map(([key, value]) => [
+              key,
+              value.filter((item) => added.has(item.id)),
+            ]) as ActiveAllPanelProps["items"]
+          }
+        />
+      </div>
 
       <Button
+        data-onboarding="finish-button"
         onClick={() => mutation.mutate(list)}
         variant="gradient"
         size="xl"
         styles={BTN_STYLES}
         radius="xl"
         loading={mutation.isPending}
+        disabled={isActive}
+        style={{
+          color: isActive ? "unset": "initial",
+          opacity: isActive ? 0.5 : 1,
+        }}
       >
         Оформить
         <Badge

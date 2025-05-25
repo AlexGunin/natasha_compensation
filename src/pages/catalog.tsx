@@ -2,7 +2,7 @@ import { useCatalogContext } from "../providers/catalog-provider.tsx";
 import { Skeleton, Stack } from "@mantine/core";
 import { CatalogGrid } from "../components/catalogs/catalog-grid.tsx";
 import { CatalogList } from "../components/catalogs/catalog-list.tsx";
-import { QueryTemplate } from "../components/query-template.tsx";
+import { QueryTemplate } from "../components/shared/query-template.tsx";
 
 const Error = () => {
   return <div>Произошла ошибка, попробуйте снова</div>;

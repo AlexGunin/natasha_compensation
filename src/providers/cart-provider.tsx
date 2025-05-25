@@ -1,6 +1,7 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react";
 import { useLocalStorage } from "@mantine/hooks";
 import { BenefitId, BenefitInOrder, BenefitItem } from "../types/benefits.ts";
+import { useGetLimit } from "../hooks/use-get-limit.ts";
 
 type Cart = Record<BenefitId, BenefitInOrder>;
 
@@ -22,9 +23,9 @@ const CartContext = createContext<ICartContext | null>(null);
 
 const DEFAULT_CART: Cart = {};
 
-const LIMIT = 50000;
-
 export const CartProvider = (props: PropsWithChildren) => {
+  const limit = useGetLimit();
+  
   const [cart, setCart] = useLocalStorage({
     key: "cart-v2",
     defaultValue: DEFAULT_CART,
@@ -46,7 +47,7 @@ export const CartProvider = (props: PropsWithChildren) => {
     const benefitInCart = cart[item.id];
 
     if (!benefitInCart) {
-      return LIMIT >= total + item.price
+      return limit >= total + item.price
         ? { value: true }
         : { value: false, reason: "Недостаточно средств" };
     }
@@ -55,7 +56,7 @@ export const CartProvider = (props: PropsWithChildren) => {
       return { value: false, reason: "Выбрано максимальное количество льгот" };
     }
 
-    return LIMIT >= total + benefitInCart.price
+    return limit >= total + benefitInCart.price
       ? { value: true }
       : { value: false, reason: "Недостаточно средств" };
   };
@@ -118,7 +119,7 @@ export const CartProvider = (props: PropsWithChildren) => {
         list,
         getQuantity,
         checkCanAdd,
-        limit: LIMIT,
+        limit,
         total,
       }}
     >

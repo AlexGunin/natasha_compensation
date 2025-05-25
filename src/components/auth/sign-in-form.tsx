@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { MouseEvent, useRef, useState } from "react";
-import { authService } from "../services/auth-service";
+import { authService } from "../../services/auth-service";
 import { Link, useRouter } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 

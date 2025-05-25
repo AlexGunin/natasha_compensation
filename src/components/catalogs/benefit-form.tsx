@@ -104,6 +104,7 @@ export const BenefitForm = (props: CreateCatalogFormProps) => {
         label="Описание"
         size="md"
         placeholder="Введите описание льготы"
+        rows={5}
         {...form.getInputProps("description")}
       />
       <NumberInput
@@ -117,6 +118,7 @@ export const BenefitForm = (props: CreateCatalogFormProps) => {
         size="md"
         label="Ограничивать количество выбранных льгот?"
         {...form.getInputProps("hasMaxUsage")}
+        checked={form.values.hasMaxUsage}
       />
       {form.values.hasMaxUsage && (
         <NumberInput

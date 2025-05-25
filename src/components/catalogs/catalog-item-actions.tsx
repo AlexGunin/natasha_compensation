@@ -4,7 +4,7 @@ import { useDrawerContext } from "../../providers/drawer-provider";
 import { BenefitForm } from "./benefit-form";
 import { BenefitItem } from "../../types/benefits";
 import { toast } from "react-toastify";
-import { ToastUndo } from "../toast-undo";
+import { ToastUndo } from "../shared/toast-undo";
 import { useCatalogContext } from "../../providers/catalog-provider";
 import { api } from "../../api/api";
 import { useQueryClient } from "@tanstack/react-query";
@@ -12,6 +12,7 @@ import { BENEFITS_QUERY_KEY } from "../../queries/benefits-query";
 
 interface CatalogItemActionsProps {
   item: BenefitItem;
+  close?: VoidFunction;
 }
 
 export const CatalogItemActions = (props: CatalogItemActionsProps) => {
@@ -22,12 +23,12 @@ export const CatalogItemActions = (props: CatalogItemActionsProps) => {
   const queryClient = useQueryClient();
 
   return (
-    <Menu shadow="md" width={200}>
-      <Menu.Target>
-        <ActionIcon variant="transparent" color="gray">
-          <Settings />
-        </ActionIcon>
-      </Menu.Target>
+    <Menu shadow="md" width={200} opened={true}>
+      {/* <Menu.Target> */}
+      {/* <ActionIcon variant="transparent" color="gray"> */}
+      {/* <Settings /> */}
+      {/* </ActionIcon> */}
+      {/* </Menu.Target> */}
 
       <Menu.Dropdown>
         <Menu.Item

@@ -5,15 +5,16 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import { lazy } from "react";
-import { Layout } from "./pages/layout.tsx";
+import { LayoutWithProviders } from "./pages/layout.tsx";
 import { authService } from "./services/auth-service.ts";
 
 const rootRoute = createRootRoute({
-  component: Layout,
-  beforeLoad: async ({ navigate }) => {
-    const user = await authService.getMe();
+  component: LayoutWithProviders,
+  beforeLoad: async ({ navigate, location }) => {
+    const user = authService.getMe();
+    const isAuthPage = location.pathname.includes('/sign-in') || location.pathname.includes('/sign-up');
 
-    if (!user) {
+    if (!user && !isAuthPage) {
       navigate({ to: "/sign-in" });
     }
   },
@@ -31,16 +32,16 @@ const signUpRoute = createRoute({
   component: lazy(() => import("./pages/sign-up.tsx")),
 });
 
-const instructionRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/",
-  component: lazy(() => import("./pages/instruction.tsx")),
-  // beforeLoad: protectedBeforeLoad,
-});
+// const instructionRoute = createRoute({
+//   getParentRoute: () => rootRoute,
+//   path: "/",
+//   component: lazy(() => import("./pages/instruction.tsx")),
+// });
 
 const catalogRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/catalog",
+  // path: "/catalog",
+  path: "/",
   component: lazy(() => import("./pages/catalog.tsx")),
 });
 
@@ -48,6 +49,18 @@ const cartRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/cart",
   component: lazy(() => import("./pages/cart.tsx")),
+});
+
+const usersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/users",
+  component: lazy(() => import("./pages/users.tsx")),
+  beforeLoad: async () => {
+    const user = authService.getMe();
+    if (!user || !authService.isAdmin) {
+      return Promise.reject();
+    }
+  },
 });
 
 const finishRoute = createRoute({
@@ -59,9 +72,10 @@ const finishRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   signInRoute,
   signUpRoute,
-  instructionRoute,
+  // instructionRoute,
   catalogRoute,
   cartRoute,
+  usersRoute,
   finishRoute,
 ]);
 

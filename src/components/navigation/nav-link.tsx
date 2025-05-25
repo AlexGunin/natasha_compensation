@@ -1,18 +1,16 @@
 import { Badge } from "@mantine/core";
-import { Link, useMatch, useRouter } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { PropsWithChildren } from "react";
+import { useActiveRoute } from "../../hooks/use-active-route";
 
 interface NavLinkProps extends PropsWithChildren {
   to: string;
 }
 
 export const NavLink = (props: NavLinkProps) => {
-  // @ts-expect-error: Todo
-  const match = useMatch({ to: props.to, fuzzy: false });
-  const { state } = useRouter();
+  const activeRoute = useActiveRoute();
 
-  const isActive =
-    state.location.pathname === `/natasha_compensation${props.to}`;
+  const isActive =props.to === activeRoute;
   return (
     <Link to={props.to}>
       <Badge

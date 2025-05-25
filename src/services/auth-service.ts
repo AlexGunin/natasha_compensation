@@ -1,14 +1,19 @@
 import { api } from "../api/api";
 import { ACCESS_TOKEN_STORAGE_KEY } from "../constants/auth";
 import { AuthResponse } from "../types/auth";
-import { SignInUser, SignUpUser, User } from "../types/users";
+import { SignInUser, SignUpUser, User, UserRole } from "../types/users";
+import { deduplication } from "../utils/deduplication";
 
 type UserUpdateCb = (user: User | null) => void;
 
 export class AuthService {
-  me: User | null = null;
+  private me: User | null = null;
 
   private subsribers = new Set<UserUpdateCb>();
+
+  get isAdmin() {
+    return this.me?.role === UserRole.ADMIN;
+  }
 
   signUp = async (data: SignUpUser) => {
     const authResponse = await api.auth.signUp(data);
@@ -29,20 +34,27 @@ export class AuthService {
   };
 
   logout = async () => {
-    // await api.auth.logout();
-    localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
+    sessionStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
     this.setMe(null);
   };
 
-  getMe = async () => {
+  getMe = () => {
+    return this.me;
+  };
+
+  fetchMe = deduplication(async () => {
     const user = await api.auth.me();
 
     this.setMe(user);
 
     return user;
-  };
+  });
 
   setMe(user: User | null) {
+    if (this.me === user) {
+      return;
+    }
+
     this.me = user;
     this.notify();
   }
@@ -60,8 +72,7 @@ export class AuthService {
       return null;
     }
     const { access_token, user } = response;
-
-    localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, access_token);
+    sessionStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, access_token);
 
     this.setMe(user);
 

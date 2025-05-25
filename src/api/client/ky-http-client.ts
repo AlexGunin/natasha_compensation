@@ -1,4 +1,4 @@
-import ky from "ky";
+import ky, { Options } from "ky";
 import { HttpClient } from "./types";
 import { ACCESS_TOKEN_STORAGE_KEY } from "../../constants/auth";
 
@@ -18,7 +18,7 @@ export class KyHttpClient implements HttpClient {
       credentials: "include",
       prefixUrl: prefixUrl,
       retry: {
-        limit: 2,
+        limit: 1,
         statusCodes: [408, 500, 502, 503, 504],
       },
       hooks: {
@@ -26,7 +26,7 @@ export class KyHttpClient implements HttpClient {
           (request) => {
             console.log(`Request to: ${request.url}`);
 
-            const token = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+            const token = sessionStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
             if (token) {
               request.headers.set("Authorization", `Bearer ${token}`);
             }
@@ -39,24 +39,25 @@ export class KyHttpClient implements HttpClient {
   async get<T>(
     url: string,
     params?: Record<string, string | number>,
+    options?: Options,
   ): Promise<T> {
     const query = buildQueryString(params);
-    return await this.client.get(`${url}${query}`).json<T>();
+    return await this.client.get(`${url}${query}`, options).json<T>();
   }
 
-  async post<T>(url: string, body?: unknown): Promise<T> {
-    return await this.client.post(url, { json: body }).json<T>();
+  async post<T>(url: string, body?: unknown, options?: Options): Promise<T> {
+    return await this.client.post(url, { json: body, ...options }).json<T>();
   }
 
-  async put<T>(url: string, body?: unknown): Promise<T> {
-    return await this.client.put(url, { json: body }).json<T>();
+  async put<T>(url: string, body?: unknown, options?: Options): Promise<T> {
+    return await this.client.put(url, { json: body, ...options }).json<T>();
   }
 
-  async patch<T>(url: string, body?: unknown): Promise<T> {
-    return await this.client.patch(url, { json: body }).json<T>();
+  async patch<T>(url: string, body?: unknown, options?: Options): Promise<T> {
+    return await this.client.patch(url, { json: body, ...options }).json<T>();
   }
 
-  async delete<T>(url: string): Promise<T> {
-    return await this.client.delete(url).json<T>();
+  async delete<T>(url: string, options?: Options): Promise<T> {
+    return await this.client.delete(url, options).json<T>();
   }
 }

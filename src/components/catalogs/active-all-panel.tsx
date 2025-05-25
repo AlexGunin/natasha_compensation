@@ -5,7 +5,7 @@ import { CatalogGrid } from "./catalog-grid";
 import { CatalogItem } from "./catalog-item";
 import { SCOPE_TAG_NAME } from "../../constants/scope-tags";
 import { useCartContext } from "../../providers/cart-provider";
-import { Price } from "../price";
+import { Price } from "../shared/price";
 
 const accordionStyles: AccordionProps["styles"] = {
   root: {

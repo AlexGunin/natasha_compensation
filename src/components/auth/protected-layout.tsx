@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "@tanstack/react-router";
-import { useUserContext } from "../providers/user-provider";
+import { useUserContext } from "../../providers/user-provider";
 
 export const ProtectedLayout = () => {
   const user = useUserContext();

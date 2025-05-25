@@ -3,6 +3,7 @@ import { PropsWithChildren } from "react";
 export const CatalogGrid = (props: PropsWithChildren) => {
   return (
     <div
+      data-onboarding="catalog-grid"
       style={{
         display: "grid",
         gap: 48,

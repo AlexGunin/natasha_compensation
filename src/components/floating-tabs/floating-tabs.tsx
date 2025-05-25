@@ -7,7 +7,7 @@ import {
 } from "@mantine/core";
 import { ReactElement, useState, MouseEvent, useEffect } from "react";
 import classes from "./floating-tabs.module.css";
-import { viewTransition } from "../utils/view-transition";
+import { viewTransition } from "../../utils/view-transition";
 
 interface FloatingTabsProps<T extends string | number> {
   defaultValue: T;
@@ -15,6 +15,7 @@ interface FloatingTabsProps<T extends string | number> {
     value: T;
     title: string;
     onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+    'data-onboarding'?: string;
   }[];
   children?: (activeTab: T) => ReactElement;
   activeTab?: T;
@@ -87,7 +88,14 @@ export const FloatingTabs = <T extends string | number>(
             // @ts-expect-error: Todo
             ref={setControlRef(tab.value)}
             className={classes.tab}
-            onClick={tab.onClick}
+            onClick={(e) => {
+              // Вызываем кастомный обработчик если есть
+              if (tab.onClick) {
+                tab.onClick(e);
+              }
+              // Не блокируем стандартное поведение таба
+            }}
+            data-onboarding={tab['data-onboarding']}
           >
             <Title order={4}>{tab.title}</Title>
           </Tabs.Tab>
