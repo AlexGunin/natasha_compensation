@@ -4,6 +4,7 @@ import { router } from "./routes.tsx";
 
 import "@mantine/core/styles.css";
 import "mantine-datatable/styles.layer.css";
+import 'mantine-contextmenu/styles.css';
 import "./App.css";
 
 

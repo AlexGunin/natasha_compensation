@@ -32,12 +32,6 @@ const signUpRoute = createRoute({
   component: lazy(() => import("./pages/sign-up.tsx")),
 });
 
-// const instructionRoute = createRoute({
-//   getParentRoute: () => rootRoute,
-//   path: "/",
-//   component: lazy(() => import("./pages/instruction.tsx")),
-// });
-
 const catalogRoute = createRoute({
   getParentRoute: () => rootRoute,
   // path: "/catalog",
@@ -72,7 +66,6 @@ const finishRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   signInRoute,
   signUpRoute,
-  // instructionRoute,
   catalogRoute,
   cartRoute,
   usersRoute,

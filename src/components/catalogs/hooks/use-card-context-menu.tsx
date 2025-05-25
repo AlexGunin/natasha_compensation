@@ -8,9 +8,9 @@ import { useCatalogContext } from "../../../providers/catalog-provider";
 import { useQueryClient } from "@tanstack/react-query";
 import { BenefitForm } from "../benefit-form";
 import { BenefitItem } from "../../../types/benefits";
-import { ToastUndo } from "../../shared/toast-undo";
 import { api } from "../../../api/api";
 import { BENEFITS_QUERY_KEY } from "../../../queries/benefits-query";
+import { ToastUndo } from "../../shared/toast-undo";
 
 export const useCardContextMenu = (item: BenefitItem) => {
   const user = useUserContext();

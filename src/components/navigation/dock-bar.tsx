@@ -11,7 +11,6 @@ import { useDrawerContext } from "../../providers/drawer-provider";
 import { Avatar } from "../shared/avatar";
 import { useRouter } from "@tanstack/react-router";
 import { useOnboarding } from "../../providers/onboarding-provider";
-import { resetOnboarding } from "../../hooks/use-auto-onboarding";
 
 const conditions = {
   unauth: () => !authService.getMe(),

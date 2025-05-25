@@ -62,6 +62,7 @@ export const UsersTable = (props: UsersTableProps) => {
       return Object.keys(filters)
         .map((filterKey) => {
           const key = filterKey as UserFieldsName;
+          // @ts-expect-error: Todo
           return userFilterCheckers[key](item, filters[key]);
         })
         .every(Boolean);

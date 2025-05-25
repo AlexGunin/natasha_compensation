@@ -1,5 +1,5 @@
-import { ActionIcon, Menu } from "@mantine/core";
-import { Settings, Trash2, SquarePen } from "lucide-react";
+import { Menu } from "@mantine/core";
+import { Trash2, SquarePen } from "lucide-react";
 import { useDrawerContext } from "../../providers/drawer-provider";
 import { BenefitForm } from "./benefit-form";
 import { BenefitItem } from "../../types/benefits";
